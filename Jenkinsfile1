@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    environment {
+        //once you sign up for Docker hub, use that user_id here
+        registry = "public.ecr.aws/s2x1x8s9/jenkins-project-repo"
+        AWS_REGION = "us-east-1"
+    }
+    stages {
+        
+        stage('Docker Build') {
+            steps {
+                script {
+                        dockerImage = docker.build registry 
+                    
+
+                    }
+            } // steps
+        } // stage
+        stage('Docker Push to ECR') {
+            steps{  
+         script {
+                // sh """docker tag ${registry}:latest ${registry}:latest"""
+                sh """docker push ${registry}:latest"""
+         }
+        }
+        //     steps {
+        //         script {
+        //             withAWS(region: AWS_REGION) {
+        //                   def login = ecrLogin()
+        //                   sh script: login, label: "Log into ECR"
+        //               }
+        //               sh script: "docker push $registry", label: "Push docker image"
+            
+        //     } // steps
+        // } // stage
+
+       
+    } //stages
+}
+// post { always { cleanWs() } }
+}
